@@ -90,9 +90,15 @@ const char* DialogSaveFilePanel(const char* title, const char* directory, const 
         [panel setDirectoryURL:[NSURL fileURLWithPath:directory]];
 
         if ([panel runModal] == NSFileHandlingPanelOKButton) {
-            if ([[panel URLs] count] > 0) {
+            if ([[panel URLs] count] > 0)
+            {
                 NSString *seperator = [NSString stringWithFormat:@"%c", 28];
-                return [[panel URLs] componentsJoinedByString:seperator];
+                NSMutableArray <NSString*> *paths = [NSMutableArray arrayWithCapacity:[panel URLs].count];
+                for(NSURL *anURL in [panel URLs])
+                {
+                    [paths addObject:[anURL.path stringByRemovingPercentEncoding]];
+                }
+                return [paths componentsJoinedByString:seperator];
             }
         }
     }
